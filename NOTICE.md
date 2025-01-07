@@ -4,7 +4,7 @@ This software is originally authored by
 
 This software includes contributions from 
 
-  * [Your Name]().
+  * [Siarhei Audzeichyk]().
 
 
 Original repository: [Craftista Project](https://github.com/craftista)
