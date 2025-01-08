@@ -1,0 +1,31 @@
+name: craftista
+
+services:
+  catalogue:
+    image: xledbd/craftista-catalogue
+    build: ./catalogue
+    networks:
+      - bridge
+
+  frontend:
+    image: xledbd/craftista-frontend
+    build: ./frontend
+    networks:
+      - bridge
+    ports:
+      - "3000:3000"
+
+  recommendation:
+    image: xledbd/craftista-recommendation
+    build: ./recommendation
+    networks:
+      - bridge
+
+  voting:
+    image: xledbd/craftista-voting
+    build: ./voting
+    networks:
+      - bridge
+
+networks:
+  bridge:
