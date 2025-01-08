@@ -82,7 +82,7 @@ describe('App', () => {
             chai.request(server)
                 .get("/")
                 .end((err, response) => {
-                    response.text.should.include("Service Status");
+                    response.text.should.include("Backend Services");
                     done();
                 });
         });
