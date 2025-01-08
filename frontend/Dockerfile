@@ -2,5 +2,6 @@ FROM node:slim
 WORKDIR /app
 COPY . .
 RUN npm install
-ENTRYPOINT ["node", "app.js"]
+ENTRYPOINT ["node"]
+CMD ["app.js"]
 EXPOSE 3000
