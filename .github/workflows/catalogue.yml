@@ -3,7 +3,9 @@ name: Catalogue CI
 on:
   push:
     branches: 
-      - "catalogue-ci"
+      - "main"
+      paths:
+      - "catalogue/**"
   pull_request:
     branches:
       - "main"
