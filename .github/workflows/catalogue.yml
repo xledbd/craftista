@@ -1,0 +1,25 @@
+name: Catalogue CI
+
+on:
+  push:
+    branches: 
+      - "catalogue-ci"
+    paths:
+      - "catalogue/**"
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - "catalogue/**"
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./catalogue
+  
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test step
+        run: echo "Test!"
