@@ -11,7 +11,7 @@ on:
       - "catalogue/**"
     
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -19,5 +19,7 @@ jobs:
   
     steps:
       - uses: actions/checkout@v4
-      - name: Test step
-        run: echo "Test!"
+      - name: Set up Python ${{ vars.PYTHON_VERSION }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ vars.PYTHON_VERSION }}
