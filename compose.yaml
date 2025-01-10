@@ -2,27 +2,32 @@ name: craftista
 
 services:
   catalogue:
-    image: xledbd/craftista-catalogue
+    image: xledbd/craftista-catalogue:dev
     build: ./catalogue
     networks:
       - bridge
 
   frontend:
-    image: xledbd/craftista-frontend
-    build: ./frontend
+    image: xledbd/craftista-frontend:dev
+    build: 
+      args:
+        - NODE_ENV=development
+      context: ./frontend
+    environment:
+      - NODE_ENV=development
     networks:
       - bridge
     ports:
       - "3000:3000"
 
   recommendation:
-    image: xledbd/craftista-recommendation
+    image: xledbd/craftista-recommendation:dev
     build: ./recommendation
     networks:
       - bridge
 
   voting:
-    image: xledbd/craftista-voting
+    image: xledbd/craftista-voting:dev
     build: ./voting
     networks:
       - bridge
