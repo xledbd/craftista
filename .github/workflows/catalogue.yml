@@ -4,8 +4,6 @@ on:
   push:
     branches: 
       - "catalogue-ci"
-    paths:
-      - "catalogue/**"
   pull_request:
     branches:
       - "main"
