@@ -1,6 +1,6 @@
 {
   "name": "craftista-frontend",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "main": "app.js",
   "dependencies": {
     "axios": "^0.21.1",
