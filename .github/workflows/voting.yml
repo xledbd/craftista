@@ -1,0 +1,23 @@
+name: Voting CI
+
+on:
+  push: 
+    branches: 
+      - "main"
+    paths: 
+      - "voting/**"
+  pull_request:  
+    branches: 
+      - "main"
+    paths: 
+      - "voting/**"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./voting
+    
+    steps:
+      - uses: actions/checkout@v4
