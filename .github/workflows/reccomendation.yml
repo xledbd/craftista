@@ -1,23 +1,23 @@
-name: Reccomendation CI
+name: Recommendation CI
 
 on:
   push:
     branches: 
       - "main"
     paths:
-      - "reccomendation/**"
+      - "recommendation/**"
   pull_request:
     branches:
       - "main"
     paths:
-      - "reccomendation/**"
+      - "recommendation/**"
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./reccomendation
+        working-directory: ./recommendation
 
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: ${{ vars.GO_VERSION }}
-          cache-dependency-path: reccomendation/go.sum
+          cache-dependency-path: recommendation/go.sum
       - name: Build
         run: go build -v
       - name: Test
