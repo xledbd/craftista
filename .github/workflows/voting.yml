@@ -21,3 +21,12 @@ jobs:
     
     steps:
       - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "corretto"
+          java-version: "23"
+          cache: maven
+          cache-dependency-path: voting/pom.xml
+      - name: Build and test
+        run: mvn -B package
