@@ -1,0 +1,46 @@
+catalogue:
+  image:
+    repository: docker.io/xledbd/craftista-catalogue
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  service:
+    type: ClusterIP
+    port: 5000
+
+frontend:
+  image:
+    repository: docker.io/xledbd/craftista-frontend
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  service:
+    type: LoadBalancer
+    port: 80
+
+  ingress:
+    enabled: false
+
+recommendation:
+  image:
+    repository: docker.io/xledbd/craftista-recommendation
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  service:
+    type: ClusterIP
+    port: 8080
+
+voting:
+  image:
+    repository: docker.io/xledbd/craftista-voting
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+
+  service:
+    type: ClusterIP
+    port: 8080
