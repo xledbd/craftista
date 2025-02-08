@@ -64,10 +64,10 @@ jobs:
     strategy:
       matrix:
         module:
-        - frontend
-        - catalogue
-        - recommendation
-        - voting
+        - 'frontend'
+        - 'catalogue'
+        - 'recommendation'
+        - 'voting'
         exclude:
         - module: ${{ needs.changed-files.outputs.frontend != 'true' && 'frontend'}}
         - module: ${{ needs.changed-files.outputs.catalogue != 'true' && 'catalogue'}}
