@@ -59,3 +59,27 @@ jobs:
         push: true
         tags:
           xledbd/craftista-frontend:${{ github.event.pull_request.number }}
+
+  deploy-dev:
+    needs: package
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    runs-on: minikube-wsl
+    
+    steps:
+    - uses: actions/checkout@v4
+    - name: Helm Upgrade
+      run:
+        helm upgrade --install --create-namespace --atomic -n ${{ github.event.pull_request.number }} \
+          dev ./deployment --set frontend.image.tag=${{ github.event.pull_request.number }}
+    - name: Helm List
+      run:
+        helm list -n ${{ github.event.pull_request.number }}
+
+  uninstall-dev:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: minikube-wsl
+
+    steps:
+    - name: Helm Uninstall
+      run:
+        helm uninstall --wait -n ${{ github.event.pull_request.number }} dev
