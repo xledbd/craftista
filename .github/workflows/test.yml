@@ -1,0 +1,59 @@
+name: Reusable workflows test
+
+on:
+  pull_request: 
+    branches: [ "main" ]
+    paths:
+      - 'frontend/**'
+      - 'catalogue/**'
+      - 'recommendation/**'
+      - 'voting/**'
+
+jobs:
+  changed-files:
+    runs-on: minikube-wsl
+    outputs:
+      frontend: ${{ steps.changed-files.outputs.frontend_any_changed }}
+      catalogue: ${{ steps.changed-files.outputs.catalogue_any_changed }}
+      recommendation: ${{ steps.changed-files.outputs.recommendation_any_changed }}
+      voting: ${{ steps.changed-files.outputs.voting_any_changed }}
+    steps:
+    - uses: actions/checkout@v4
+  
+    - name: Get changed files in all modules
+      id: changed-files
+      uses: tj-actions/changed-files@v45
+      with:
+        files_yaml: |
+          frontend:
+            - frontend/**
+          catalogue:
+            - catalogue/**
+          recommendation:
+            - recommendation/**
+          voting:
+            - voting/**
+
+  build-frontend:
+    needs: changed-files
+    name: Build Frontend
+    uses: ./.github/workflows/frontend.yml
+    if: needs.changed-files.outputs.frontend == 'true'
+
+  build-catalogue:
+    needs: changed-files
+    name: Build Catalogue
+    uses: ./.github/workflows/catalogue.yml
+    if: needs.changed-files.outputs.catalogue == 'true'
+
+  build-recommendation:
+    needs: changed-files
+    name: Build Recommendation
+    uses: ./.github/workflows/recommendation.yml
+    if: needs.changed-files.outputs.recommendation == 'true'
+
+  build-voting:
+    needs: changed-files
+    name: Build Voting
+    uses: ./.github/workflows/voting.yml
+    if: needs.changed-files.outputs.voting == 'true'
