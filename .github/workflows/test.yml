@@ -59,6 +59,8 @@ jobs:
     if: needs.changed-files.outputs.voting == 'true'
 
   package:
+    needs: [build-catalogue, build-frontend, build-recommendation, build-voting]
+    if: ${{ !failure() && !cancelled() }}
     strategy:
       matrix:
         module:
@@ -71,6 +73,8 @@ jobs:
         - module: ${{ needs.changed-files.outputs.catalogue != 'true' && 'catalogue'}}
         - module: ${{ needs.changed-files.outputs.recommendation != 'true' && 'recommendation'}}
         - module: ${{ needs.changed-files.outputs.voting != 'true' && 'voting'}}
+    name: Package ${{ matrix.module }}
     uses: ./.github/workflows/package.yml
     with:
       module: ${{ matrix.module }}
+    secrets: inherit
