@@ -27,6 +27,8 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v6
       with:
+        cache-from: type=gha
+        cache-to: type=gha
         context: "./${{ inputs.module }}"
         push: true
         tags:
