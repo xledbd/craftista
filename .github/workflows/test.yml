@@ -57,3 +57,20 @@ jobs:
     name: Build Voting
     uses: ./.github/workflows/voting.yml
     if: needs.changed-files.outputs.voting == 'true'
+
+  package:
+    strategy:
+      matrix:
+        module:
+        - frontend
+        - catalogue
+        - recommendation
+        - voting
+        exclude:
+        - module: ${{ needs.changed-files.outputs.frontend != 'true' && 'frontend'}}
+        - module: ${{ needs.changed-files.outputs.catalogue != 'true' && 'catalogue'}}
+        - module: ${{ needs.changed-files.outputs.recommendation != 'true' && 'recommendation'}}
+        - module: ${{ needs.changed-files.outputs.voting != 'true' && 'voting'}}
+    uses: ./.github/workflows/package.yml
+    with:
+      module: ${{ matrix.module }}
