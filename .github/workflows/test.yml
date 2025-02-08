@@ -64,17 +64,17 @@ jobs:
     strategy:
       matrix:
         module:
-        - 'frontend'
-        - 'catalogue'
-        - 'recommendation'
-        - 'voting'
-        exclude:
-        - module: ${{ needs.changed-files.outputs.frontend != 'true' && 'frontend'}}
-        - module: ${{ needs.changed-files.outputs.catalogue != 'true' && 'catalogue'}}
-        - module: ${{ needs.changed-files.outputs.recommendation != 'true' && 'recommendation'}}
-        - module: ${{ needs.changed-files.outputs.voting != 'true' && 'voting'}}
-    name: Package ${{ matrix.module }}
+        - name: 'frontend'
+          if: ${{ needs.changed-files.outputs.frontend == 'true' }}
+        - name: 'catalogue'
+          if: ${{ needs.changed-files.outputs.catalogue == 'true' }}
+        - name: 'recommendation'
+          if: ${{ needs.changed-files.outputs.recommendation == 'true' }}
+        - name: 'voting'
+          if: ${{ needs.changed-files.outputs.voting == 'true' }}
+    name: Package
     uses: ./.github/workflows/package.yml
     with:
-      module: ${{ matrix.module }}
+      module: ${{ matrix.module.name }}
+      if: ${{ matrix.module.if }}
     secrets: inherit

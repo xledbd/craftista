@@ -6,9 +6,15 @@ on:
       module:
         required: true
         type: string
+      if:
+        description: 'Whether to run this job'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   package:
+    if: ${{ inputs.if }}
     name: ${{ inputs.module }}
     runs-on: minikube-wsl
     defaults:
