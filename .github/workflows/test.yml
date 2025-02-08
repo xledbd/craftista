@@ -86,7 +86,7 @@ jobs:
 
   deploy-dev:
     needs: [changed-files, package]
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    if: github.event_name == 'pull_request' && github.event.action != 'closed' && !failure() && !cancelled()
     runs-on: minikube-wsl
     
     steps:
