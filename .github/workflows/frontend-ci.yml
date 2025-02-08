@@ -15,6 +15,7 @@ on:
 
 jobs:
   build-and-test:
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
     runs-on: minikube-wsl
     defaults:
       run:
@@ -68,9 +69,11 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Helm Upgrade
-      run:
-        helm upgrade --install --create-namespace --atomic -n ${{ github.event.pull_request.number }} \
-          dev ./deployment --set frontend.image.tag=${{ github.event.pull_request.number }}
+      run: >-
+        helm upgrade --install --create-namespace --atomic -n ${{ github.event.pull_request.number }}
+          dev ./deployment
+          --set frontend.image.tag=${{ github.event.pull_request.number }}
+          --set frontend.service.type="NodePort"
     - name: Helm List
       run:
         helm list -n ${{ github.event.pull_request.number }}
@@ -83,3 +86,6 @@ jobs:
     - name: Helm Uninstall
       run:
         helm uninstall --wait -n ${{ github.event.pull_request.number }} dev
+    - name: Delete k8s namespace
+      run:
+        kubectl delete namespace ${{ github.event.pull_request.number }}
