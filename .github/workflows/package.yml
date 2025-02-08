@@ -15,11 +15,11 @@ on:
 jobs:
   package:
     if: ${{ inputs.if }}
-    name: ${{ inputs.module }}
+    name: "${{ inputs.module }}"
     runs-on: minikube-wsl
     defaults:
       run:
-        working-directory: ./${{ inputs.module }}
+        working-directory: "./${{ inputs.module }}"
     
     steps:
     - uses: actions/checkout@v4
@@ -33,7 +33,7 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v6
       with:
-        context: ./${{ inputs.module }}
+        context: "./${{ inputs.module }}"
         push: true
         tags:
-          xledbd/craftista-${{ inputs.module }}:${{ github.event.pull_request.number }}
+          "xledbd/craftista-${{ inputs.module }}:${{ github.event.pull_request.number }}"

@@ -59,7 +59,7 @@ jobs:
     if: needs.changed-files.outputs.voting == 'true'
 
   package:
-    needs: [build-catalogue, build-frontend, build-recommendation, build-voting]
+    needs: [changed-files, build-catalogue, build-frontend, build-recommendation, build-voting]
     if: ${{ !failure() && !cancelled() }}
     strategy:
       matrix:
