@@ -70,10 +70,10 @@ jobs:
     - uses: actions/checkout@v4
     - name: Helm Upgrade
       run: >-
-        helm upgrade --install --create-namespace --atomic -n ${{ github.event.pull_request.number }}
-          dev ./deployment
-          --set frontend.image.tag=${{ github.event.pull_request.number }}
-          --set frontend.service.type="NodePort"
+        helm upgrade dev ./deployment
+        --install --create-namespace --atomic -n ${{ github.event.pull_request.number }}
+        --set frontend.image.tag=${{ github.event.pull_request.number }}
+        --set frontend.service.type="NodePort"
     - name: Helm List
       run:
         helm list -n ${{ github.event.pull_request.number }}
@@ -84,8 +84,9 @@ jobs:
 
     steps:
     - name: Helm Uninstall
-      run:
-        helm uninstall --wait -n ${{ github.event.pull_request.number }} dev
+      run: >-
+        helm uninstall dev 
+        --wait -n ${{ github.event.pull_request.number }} 
     - name: Delete k8s namespace
       run:
         kubectl delete namespace ${{ github.event.pull_request.number }}
