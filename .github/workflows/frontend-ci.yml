@@ -15,7 +15,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: minikube-wsl
     defaults:
       run:
         working-directory: ./frontend
@@ -37,8 +37,8 @@ jobs:
   
   package:
     needs: build-and-test
-    if: github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    runs-on: minikube-wsl
     defaults:
       run:
         working-directory: ./frontend
@@ -58,4 +58,4 @@ jobs:
         context: ./frontend
         push: true
         tags:
-          xledbd/craftista-frontend:latest
+          xledbd/craftista-frontend:${{ github.event.pull_request.number }}
