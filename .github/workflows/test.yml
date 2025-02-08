@@ -8,6 +8,11 @@ on:
       - 'catalogue/**'
       - 'recommendation/**'
       - 'voting/**'
+    types: 
+      - opened
+      - closed
+      - reopened
+      - synchronize
 
 jobs:
   changed-files:
@@ -78,3 +83,11 @@ jobs:
     with:
       module: ${{ matrix.module }}
     secrets: inherit
+
+  deploy-dev:
+    needs: [changed-files, package]
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    runs-on: minikube-wsl
+    
+    steps:
+    - run: echo ${{ needs.package.outputs.vals }}
