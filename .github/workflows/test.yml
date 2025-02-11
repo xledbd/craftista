@@ -22,6 +22,7 @@ jobs:
       catalogue: ${{ steps.changed-files.outputs.catalogue_any_modified }}
       recommendation: ${{ steps.changed-files.outputs.recommendation_any_modified }}
       voting: ${{ steps.changed-files.outputs.voting_any_modified }}
+      modules: ${{ steps.changed-files.outputs.changed_keys }}
     steps:
     - uses: actions/checkout@v4
   
@@ -90,18 +91,4 @@ jobs:
     runs-on: minikube-wsl
     
     steps:
-    - uses: actions/checkout@v4
-  
-    - name: Get changed modules
-      id: changed-modules
-      uses: tj-actions/changed-files@v45
-      with:
-        dir_names: 'true'
-        dir_names_exclude_current_dir: 'true'
-        files: |
-          frontend/**
-          catalogue/**
-          recommendation/**
-          voting/**
-
-    - run: echo "${{ steps.changed-modules.outputs.all_modified_files }}"
+        - run: echo "${{ needs.changed-files.outputs.modules }}"
