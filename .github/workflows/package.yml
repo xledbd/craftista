@@ -6,9 +6,6 @@ on:
       module:
         required: true
         type: string
-    outputs:
-      vals:
-        value: ${{ jobs.package.outputs.output }}
 
 jobs:
   package:
@@ -17,8 +14,6 @@ jobs:
     defaults:
       run:
         working-directory: "./${{ inputs.module }}"
-    outputs:
-      output: ${{ steps.generate.str }}
     
     steps:
     - uses: actions/checkout@v4
@@ -38,6 +33,3 @@ jobs:
         push: true
         tags:
           "xledbd/craftista-${{ inputs.module }}:${{ github.event.pull_request.number }}"
-    - name: Generate output string
-      id: generate
-      run: echo "str=${{ inputs.module }}.image.tag=${{ github.event.pull_request.number }}," >> $GITHUB_OUTPUT
