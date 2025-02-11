@@ -90,4 +90,4 @@ jobs:
     runs-on: minikube-wsl
     
     steps:
-    - run: echo ${{ needs.changed-files.outputs.changed_keys }}
+    - run: echo "${{ needs.changed-files.outputs.changed_keys }}"
