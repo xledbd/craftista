@@ -1,0 +1,25 @@
+name: Pull Request uninstall
+
+on:
+  pull_request: 
+    branches: [ "main" ]
+    paths:
+      - 'frontend/**'
+      - 'catalogue/**'
+      - 'recommendation/**'
+      - 'voting/**'
+    types: 
+      - closed
+
+jobs:
+  uninstall-dev:
+    runs-on: minikube-wsl
+
+    steps:
+    - name: Run helm uninstall
+      run: >-
+        helm uninstall dev 
+        --wait -n ${{ github.event.pull_request.number }} 
+    - name: Delete k8s namespace
+      run:
+        kubectl delete namespace ${{ github.event.pull_request.number }}

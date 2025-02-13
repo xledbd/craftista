@@ -10,13 +10,11 @@ on:
       - 'voting/**'
     types: 
       - opened
-      - closed
       - reopened
       - synchronize
 
 jobs:
   changed-files:
-    if: github.event.action != 'closed'
     runs-on: minikube-wsl
     outputs:
       frontend: ${{ steps.changed-files.outputs.frontend_any_modified }}
@@ -103,16 +101,3 @@ jobs:
         -f deployment/overrides.yaml
         --install --create-namespace --atomic -n ${{ github.event.pull_request.number }}
         --set frontend.service.type="NodePort"
-
-  uninstall-dev:
-    if: github.event.action == 'closed'
-    runs-on: minikube-wsl
-
-    steps:
-    - name: Helm Uninstall
-      run: >-
-        helm uninstall dev 
-        --wait -n ${{ github.event.pull_request.number }} 
-    - name: Delete k8s namespace
-      run:
-        kubectl delete namespace ${{ github.event.pull_request.number }}
