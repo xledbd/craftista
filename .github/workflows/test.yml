@@ -92,11 +92,11 @@ jobs:
         MODULES: ${{ needs.changed-files.outputs.modules }}
 
     - name: Debug overrides.yaml
-      run: echo deployment/overrides.yaml
+      run: cat deployment/overrides.yaml
 
     - name: Run helm upgrade
       run: >-
         helm upgrade dev ./deployment
-        -f overrides.yaml
+        -f deployment/overrides.yaml
         --install --create-namespace --atomic -n ${{ github.event.pull_request.number }}
         --set frontend.service.type="NodePort"
