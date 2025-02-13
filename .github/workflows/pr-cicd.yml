@@ -1,4 +1,4 @@
-name: Reusable workflows test
+name: Pull request CI/CD
 
 on:
   pull_request: 
@@ -85,7 +85,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Generate overrides.yaml file
       run: |
         for i in $(yq '. | .[]' <<< $MODULES); do
