@@ -11,19 +11,14 @@ jobs:
     steps:
     - name: Get PR number
       id: get-pr-number
-      uses: actions/github-script@v7
-      with:
-        result-encoding: string
-        script: |
-          return github.request(`GET /repos/${context.repo.owner}/${context.repo.repo}/commits/eadcce12aa4a3a5e1f16da69c8620283c83ffe7e/pulls`, {
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            commit_sha: "eadcce12aa4a3a5e1f16da69c8620283c83ffe7e",
-            headers: {
-              'X-GitHub-Api-Version': '2022-11-28'
-            }
-          })
-          return pulls[0].number
+      run: >-
+        echo "number=$(
+        curl -L 
+        -H "Accept: application/vnd.github+json" 
+        -H "X-GitHub-Api-Version: 2022-11-28" 
+        https://api.github.com/repos/xledbd/craftista/commits/a6adf1ebc739cc292557b22e711e5f1c6b077ded/pulls |
+        yq '.[0].number'
+        )" >> "$GITHUB_OUTPUT"
 
     - name: Debug output
-      run: echo "${{ steps.get-pr-number.outputs.result }}"
+      run: echo "${{ steps.get-pr-number.outputs.number }}"
