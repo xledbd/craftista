@@ -1,17 +1,14 @@
 apiVersion: v2
 name: craftista
 description: A Helm chart for craftista app
-
 type: application
-
 version: 0.1.0
-
 dependencies:
   - name: catalogue
     version: 0.1.0
     repository: "file://charts/catalogue"
   - name: frontend
-    version: 0.1.0
+    version: 0.2.0
     repository: "file://charts/frontend"
   - name: recommendation
     version: 0.1.0
