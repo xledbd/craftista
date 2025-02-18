@@ -77,9 +77,11 @@ jobs:
     secrets: inherit
 
   deploy-dev:
+    name: Deploy to dev
     needs: [changed-files, package]
     if: ${{ !failure() && !cancelled() }}
     runs-on: minikube-wsl
+    environment: dev
     
     steps:
     - uses: actions/checkout@v4
