@@ -15,7 +15,7 @@ jobs:
       with:
         result-encoding: string
         script: |
-          const pulls = octokit.request(`GET /repos/${context.repo.owner}/${context.repo.repo}/commits/eadcce12aa4a3a5e1f16da69c8620283c83ffe7e/pulls`, {
+          const pulls = github.request(`GET /repos/${context.repo.owner}/${context.repo.repo}/commits/eadcce12aa4a3a5e1f16da69c8620283c83ffe7e/pulls`, {
             owner: context.repo.owner,
             repo: context.repo.repo,
             commit_sha: "eadcce12aa4a3a5e1f16da69c8620283c83ffe7e",
