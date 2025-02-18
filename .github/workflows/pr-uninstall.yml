@@ -24,12 +24,7 @@ jobs:
       run:
         kubectl delete namespace ${{ github.event.pull_request.number }}
 
-  delete-deployment:
-    runs-on: minikube-wsl
-    name: Delete deployment
-
-    steps:
-    - name: Delete Deployment Environment
+    - name: Delete dev deployments
       uses: strumwolf/delete-deployment-environment@v3.0.0
       with:
         environment: dev
