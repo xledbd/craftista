@@ -1,0 +1,80 @@
+name: Deploy to Produciton
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: minikube-wsl
+    environment: prod
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ vars.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    
+    - name: Get PR number
+      id: get-pr-number
+      uses: actions/github-script@v7
+      with:
+        result-encoding: string
+        script: |
+          const pulls = await octokit.request(`GET /repos/${context.repo.owner}/${context.repo.repo}/commits/{commit_sha}/pulls`, {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            commit_sha: context.sha,
+            headers: {
+             'X-GitHub-Api-Version': '2022-11-28'
+            }
+          })
+          return pulls[0].number
+
+    - name: Get changed modules
+      id: changed-modules
+      uses: tj-actions/changed-files@v45
+      with:
+        matrix: true
+        files_yaml: |
+          frontend:
+            - frontend/**
+          catalogue:
+            - catalogue/**
+          recommendation:
+            - recommendation/**
+          voting:
+            - voting/**
+
+    - name: Update chart versions
+      env:
+        PR_NUMBER: ${{ steps.get-pr-number.outputs.result }}
+        MODULES: ${{ steps.changed-modules.outputs.changed_keys }}
+      run: |
+        for module in $(yq '. | .[]' <<< $MODULES); do
+            echo "xledbd/craftista-$module:$PR_NUMBER"
+            oldver=$(yq '.version' deployment/charts/$module/Chart.yaml)
+            oldappver=$(yq '.appVersion' deployment/charts/$module/Chart.yaml)
+            export NEWVER=$(semver -i minor $oldver)
+            export NEWAPPVER=$(semver -i minor $oldappver)
+            export MODULE_NAME=$module
+            docker buildx imagetools create xledbd/craftista-$module:$PR_NUMBER --tag xledbd/craftista-frontend:$NEWAPPVER
+            yq -i '.version = env(NEWVER)' deployment/charts/$module/Chart.yaml
+            yq -i '.appVersion = env(NEWAPPVER)' deployment/charts/$module/Chart.yaml
+            yq -i 'with(.dependencies[]; select(.name == env(MODULE_NAME)).version = env(NEWVER))' deployment/Chart.yaml
+        done
+
+    - name: Commit changes
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: Update chart versions
+        push_options: '--force'
+  
+    - name: Deploy to prod
+      run: >-
+        helm upgrade craftista ./deployment
+        --install --create-namespace --atomic -n prod
+        --set frontend.service.type="NodePort"
