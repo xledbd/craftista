@@ -1,0 +1,29 @@
+name: Github script test
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: minikube-wsl
+
+    steps:
+    - name: Get PR number
+      id: get-pr-number
+      uses: actions/github-script@v7
+      with:
+        result-encoding: string
+        script: |
+          const pulls = await octokit.request(`GET /repos/${context.repo.owner}/${context.repo.repo}/commits/eadcce12aa4a3a5e1f16da69c8620283c83ffe7e/pulls`, {
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          commit_sha: "eadcce12aa4a3a5e1f16da69c8620283c83ffe7e",
+          headers: {
+            'X-GitHub-Api-Version': '2022-11-28'
+            }
+          })
+          return pulls[0].number
+
+    - name: Debug output
+      run: echo "${{ steps.get-pr-number.outputs.result }}"
