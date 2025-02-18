@@ -14,7 +14,6 @@ on:
 jobs:
   uninstall-dev:
     runs-on: minikube-wsl
-    environment: dev
 
     steps:
     - name: Run helm uninstall
@@ -24,3 +23,15 @@ jobs:
     - name: Delete k8s namespace
       run:
         kubectl delete namespace ${{ github.event.pull_request.number }}
+
+  delete-deployment:
+    runs-on: minikube-wsl
+    name: Delete deployment
+
+    steps:
+    - name: Delete Deployment Environment
+      uses: strumwolf/delete-deployment-environment@v3.0.0
+      with:
+        environment: dev
+        token: ${{ secrets.GITHUB_TOKEN }}
+        onlyRemoveDeployments: true
