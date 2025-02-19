@@ -76,6 +76,16 @@ jobs:
         commit_options: '--amend --no-edit'
         push_options: '--force'
         skip_fetch: true
+
+    - name: Push tags
+      env: 
+        MODULES: ${{ steps.changed-modules.outputs.changed_keys }}
+      run: |
+        for module in $(yq '. | .[]' <<< $MODULES); do
+            appver=$(yq '.appVersion' deployment/charts/$module/Chart.yaml)
+            git tag "$module/$appver" -m "$module/$appver"
+        done
+        git push --tags
   
     - name: Deploy to prod
       run: >-
