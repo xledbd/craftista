@@ -1,5 +1,5 @@
 {
-    "app_version": "1.0.1",
+    "app_version": "1.0.2",
     "data_source": "json",
     "db_host": "catalogue-db",
     "db_name": "catalogue",
