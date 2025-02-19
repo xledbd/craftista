@@ -12,6 +12,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Get last commit message
+      id: last-commit
+      run: |
+        echo "message=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
+        echo "author=$(git log -1 --pretty=\"%an <%ae>\")" >> $GITHUB_OUTPUT
+
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
@@ -56,7 +62,7 @@ jobs:
             export NEWVER=$(semver -i minor $oldver)
             export NEWAPPVER=$(semver -i minor $oldappver)
             export MODULE_NAME=$module
-            docker buildx imagetools create xledbd/craftista-$module:$PR_NUMBER --tag xledbd/craftista-frontend:$NEWAPPVER
+            docker buildx imagetools create xledbd/craftista-$module:$PR_NUMBER --tag xledbd/craftista-$module:$NEWAPPVER
             yq -i '.version = env(NEWVER)' deployment/charts/$module/Chart.yaml
             yq -i '.appVersion = env(NEWAPPVER)' deployment/charts/$module/Chart.yaml
             yq -i 'with(.dependencies[]; select(.name == env(MODULE_NAME)).version = env(NEWVER))' deployment/Chart.yaml
@@ -65,8 +71,11 @@ jobs:
     - name: Commit changes
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
-        commit_message: Update chart versions
+        commit_author: ${{ steps.last-commit.outputs.author }}
+        commit_message: ${{ steps.last-commit.outputs.message }}
+        commit_options: '--amend --no-edit'
         push_options: '--force'
+        skip_fetch: true
   
     - name: Deploy to prod
       run: >-
