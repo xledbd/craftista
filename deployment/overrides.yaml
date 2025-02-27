@@ -1,4 +1,1 @@
 # Values overrides
-frontend:
-  ingress:
-    enabled: true
