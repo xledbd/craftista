@@ -10,7 +10,8 @@ spec:
   ingressClassName: {{ . }}
   {{- end }}
   rules:
-  - http:
+  - host: craftista.siarheiau.ovh
+    http:
       paths:
       - path: /
         pathType: Prefix
@@ -19,4 +20,8 @@ spec:
             name: {{ .Chart.Name }}
             port:
               name: http
+  tls:
+  - secretName: tls-secret
+    hosts:
+      - craftista.siarheiau.ovh
 {{- end }}
