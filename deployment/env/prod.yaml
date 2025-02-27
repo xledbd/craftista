@@ -1,4 +1,4 @@
-# Values overrides
+# Overrides for prod environment
 frontend:
   ingress:
     enabled: true

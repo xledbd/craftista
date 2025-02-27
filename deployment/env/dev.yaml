@@ -1,0 +1,4 @@
+# Overrides for dev environment
+frontend:
+  service:
+    type: "NodePort"
