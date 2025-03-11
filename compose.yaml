@@ -8,6 +8,8 @@ services:
       - bridge
     ports:
       - "5000:5000"
+    volumes:
+      - $HOME/.aws/:/root/.aws/:ro
 
   frontend:
     image: xledbd/craftista-frontend:dev
