@@ -1,6 +1,6 @@
 catalogue:
   image:
-    repository: docker.io/xledbd/craftista-catalogue
+    repository: public.ecr.aws/xledbd/craftista/catalogue
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
@@ -11,7 +11,7 @@ catalogue:
 
 frontend:
   image:
-    repository: docker.io/xledbd/craftista-frontend
+    repository: public.ecr.aws/xledbd/craftista/frontend
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
@@ -25,7 +25,7 @@ frontend:
 
 recommendation:
   image:
-    repository: docker.io/xledbd/craftista-recommendation
+    repository: public.ecr.aws/xledbd/craftista/recommendation
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""
@@ -36,7 +36,7 @@ recommendation:
 
 voting:
   image:
-    repository: docker.io/xledbd/craftista-voting
+    repository: public.ecr.aws/xledbd/craftista/voting
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: ""

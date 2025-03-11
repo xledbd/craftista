@@ -15,7 +15,7 @@ on:
 
 jobs:
   changed-files:
-    runs-on: minikube-wsl
+    runs-on: ubuntu-latest
     outputs:
       frontend: ${{ steps.changed-files.outputs.frontend_any_modified }}
       catalogue: ${{ steps.changed-files.outputs.catalogue_any_modified }}
