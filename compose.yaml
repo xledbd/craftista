@@ -6,6 +6,8 @@ services:
     build: ./catalogue
     networks:
       - bridge
+    ports:
+      - "5000:5000"
 
   frontend:
     image: xledbd/craftista-frontend:dev
@@ -25,12 +27,16 @@ services:
     build: ./recommendation
     networks:
       - bridge
+    ports:
+      - "8080:8080"
 
   voting:
     image: xledbd/craftista-voting:dev
     build: ./voting
     networks:
       - bridge
+    ports:
+      - "8081:8080"
 
 networks:
   bridge:
