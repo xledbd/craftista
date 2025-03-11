@@ -51,6 +51,7 @@ jobs:
     name: Build Catalogue
     uses: ./.github/workflows/catalogue.yml
     if: needs.changed-files.outputs.catalogue == 'true'
+    secrets: inherit
 
   build-recommendation:
     needs: changed-files
