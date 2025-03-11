@@ -66,7 +66,7 @@ function renderProducts(products, canVote) {
     productElement.className = 'product';
     productElement.innerHTML = `
       <h3>${product.name}</h3>
-      <img src="${product.image_url}" alt="${product.name}" />
+      <img src="https://craftista-catalogue-db.s3.eu-central-1.amazonaws.com${product.image_url}" alt="${product.name}" />
       <p id="votes-${product.id}">Votes: Loading...</p>
       ${canVote ? `<button onclick="submitVote(${product.id})">Vote 👍</button>` : ''}
       <p class="description" id="desc-${product.id}">${shortenDescription(product.description)}</p>

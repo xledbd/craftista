@@ -29,3 +29,5 @@ readinessProbe:
   httpGet:
     path: /
     port: http
+
+awsSecretName: "aws-creds"

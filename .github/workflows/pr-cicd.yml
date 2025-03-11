@@ -51,6 +51,7 @@ jobs:
     name: Build Catalogue
     uses: ./.github/workflows/catalogue.yml
     if: needs.changed-files.outputs.catalogue == 'true'
+    secrets: inherit
 
   build-recommendation:
     needs: changed-files
@@ -96,6 +97,15 @@ jobs:
 
     - name: Debug overrides.yaml
       run: cat deployment/overrides.yaml
+
+    - name: Create a secret with AWS credentials
+      run: |
+        kubectl create namespace ${{ github.event.pull_request.number }}
+        kubectl create secret generic aws-creds \
+        -n ${{ github.event.pull_request.number }} \
+        --from-literal=AWS_ACCESS_KEY_ID='${{ secrets.AWS_ACCESS_KEY_ID }}' \
+        --from-literal=AWS_SECRET_ACCESS_KEY='${{ secrets.AWS_SECRET_ACCESS_KEY }}' \
+        --from-literal=AWS_DEFAULT_REGION='${{ vars.AWS_REGION }}'
 
     - name: Run helm upgrade
       run: >-
