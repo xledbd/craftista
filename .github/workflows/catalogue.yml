@@ -12,6 +12,8 @@ jobs:
   
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up Python ${{ vars.PYTHON_VERSION }}
         uses: actions/setup-python@v3
         with:
@@ -28,3 +30,9 @@ jobs:
           AWS_DEFAULT_REGION: ${{ vars.AWS_REGION }}
         run: |
           pytest
+      - name: SonarQube scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: catalogue/
