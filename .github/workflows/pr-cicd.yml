@@ -59,6 +59,7 @@ jobs:
     name: Build Recommendation
     uses: ./.github/workflows/recommendation.yml
     if: needs.changed-files.outputs.recommendation == 'true'
+    secrets: inherit
 
   build-voting:
     needs: changed-files
