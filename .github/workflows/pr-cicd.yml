@@ -66,6 +66,7 @@ jobs:
     name: Build Voting
     uses: ./.github/workflows/voting.yml
     if: needs.changed-files.outputs.voting == 'true'
+    secrets: inherit
 
   package:
     needs: [changed-files, build-catalogue, build-frontend, build-recommendation, build-voting]
