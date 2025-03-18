@@ -45,6 +45,7 @@ jobs:
     name: Build Frontend
     uses: ./.github/workflows/frontend.yml
     if: needs.changed-files.outputs.frontend == 'true'
+    secrets: inherit
 
   build-catalogue:
     needs: changed-files
