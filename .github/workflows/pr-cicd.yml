@@ -45,6 +45,7 @@ jobs:
     name: Build Frontend
     uses: ./.github/workflows/frontend.yml
     if: needs.changed-files.outputs.frontend == 'true'
+    secrets: inherit
 
   build-catalogue:
     needs: changed-files
@@ -58,12 +59,14 @@ jobs:
     name: Build Recommendation
     uses: ./.github/workflows/recommendation.yml
     if: needs.changed-files.outputs.recommendation == 'true'
+    secrets: inherit
 
   build-voting:
     needs: changed-files
     name: Build Voting
     uses: ./.github/workflows/voting.yml
     if: needs.changed-files.outputs.voting == 'true'
+    secrets: inherit
 
   package:
     needs: [changed-files, build-catalogue, build-frontend, build-recommendation, build-voting]
@@ -100,12 +103,14 @@ jobs:
 
     - name: Create a secret with AWS credentials
       run: |
+        kubectl get namespace ${{ github.event.pull_request.number }} || { \
         kubectl create namespace ${{ github.event.pull_request.number }}
         kubectl create secret generic aws-creds \
         -n ${{ github.event.pull_request.number }} \
         --from-literal=AWS_ACCESS_KEY_ID='${{ secrets.AWS_ACCESS_KEY_ID }}' \
         --from-literal=AWS_SECRET_ACCESS_KEY='${{ secrets.AWS_SECRET_ACCESS_KEY }}' \
         --from-literal=AWS_DEFAULT_REGION='${{ vars.AWS_REGION }}'
+        }
 
     - name: Run helm upgrade
       run: >-
